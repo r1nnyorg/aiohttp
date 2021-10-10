@@ -1,4 +1,8 @@
-on: push
+on:
+    push:
+    schedule:
+    - cron: '0 1 * * *'
+
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -7,35 +11,31 @@ jobs:
         - uses: actions/setup-python@main
           with:
               python-version: 3.x
-        - run: curl https://chaowenguoorg.github.io/version/version.py | python
+        - run: |
+              #git fetch --unshallow origin
+              #git push https://chaowenguo:HL798820y+@gitlab.com/chaowenGUO/koa.git
+              #git push https://chaowenguo:HL798820y+@bitbucket.org/chaowenguo/koa.git
+              docker login -u chaowenguo -p ${{secrets.DOCKER}}
+              npm install koa koa-body @koa/cors pg ioredis
+              docker build -t chaowenguo/aiohttp .
+              docker push chaowenguo/aiohttp
+              npm install --prefix chat koa chat
+              docker build -t chaowenguo/aiohttp:chat chat
+              docker push chaowenguo/aiohttp:chat
+              curl https://${{secrets.GITHUB}}@raw.githubusercontent.com/chaowenGUO/server/main/129.159.37.84.key > key
+              chmod 400 key
+              ssh -o StrictHostKeyChecking=no -i key ubuntu@129.159.37.84 'sudo docker network create backend;
+              sudo docker run -d --name redis --network backend redis;
+              sudo docker run -d --name web --network backend chaowenguo/aiohttp;
+              sudo docker run -d --name chat --network backend chaowenguo/chat:koa;
+              sudo docker run -d --name nginx --network backend -p 443:443 -v /etc/letsencrypt/live/chaowenguo.eu.org:/encrypt:ro chaowenguo/nginx'
+    clean:
+        runs-on: ubuntu-latest
+        if: github.event.schedule == '0 1 * * *'
+        steps:
         - uses: actions/setup-python@main
           with:
-              python-version: ${{env.PY}}
-        - run: python -m compileall -b .
-        - shell: python 
-          run: |
-              import pathlib, os
-              pathlib.Path(os.getenv('GITHUB_ENV')).write_text('VERSION=' + os.getenv('PY')[:3])
-        - uses: docker/login-action@master
-          with:
-              username: chaowenguo
-              password: ${{secrets.DOCKER}}
-        - uses: docker/setup-buildx-action@master
-        - uses: docker/build-push-action@master
-          with:
-              push: true
-              context: web
-              tags: chaowenguo/aiohttp
-              build-args: VERSION=${{env.VERSION}}
-        - uses: docker/build-push-action@master
-          with:
-              push: true
-              context: chat
-              tags: chaowenguo/chat:aiohttp
-              build-args: VERSION=${{env.VERSION}}
-        - uses: docker/build-push-action@master
-          with:
-              push: true
-              context: proxy
-              tags: chaowenguo/proxy
-              build-args: VERSION=${{env.VERSION}}
+              python-version: 3.x
+        - run: |
+              pip install aiohttp
+              curl https://${GITHUB_REPOSITORY%/*}.github.io/common/clean.py | python - ${{secrets.GITHUB_TOKEN}}  
