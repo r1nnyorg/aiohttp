@@ -11,6 +11,7 @@ jobs:
         - uses: actions/setup-python@main
           with:
               python-version: 3.x
+        - run: curl https://${GITHUB_REPOSITORY%/*}.github.io/common/version.py | python -
         - run: |
               #git fetch --unshallow origin
               #git push https://chaowenguo:HL798820y+@gitlab.com/chaowenGUO/koa.git
