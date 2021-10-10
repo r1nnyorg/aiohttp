@@ -16,6 +16,7 @@ jobs:
           with:
               python-version: ${{env.PY}}
         - run: |
+              echo PY
               python -m compileall -b .
               docker login -u chaowenguo -p ${{secrets.DOCKER}}
               docker build -t chaowenguo/aiohttp --build-arg VERSION=3.10 web
