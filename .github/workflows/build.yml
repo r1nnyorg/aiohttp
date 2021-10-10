@@ -16,23 +16,18 @@ jobs:
           with:
               python-version: ${{env.PY}}
         - run: |
-              echo ${{env.PY}}
-              #git fetch --unshallow origin
-              #git push https://chaowenguo:HL798820y+@gitlab.com/chaowenGUO/koa.git
-              #git push https://chaowenguo:HL798820y+@bitbucket.org/chaowenguo/koa.git
+              python -m compileall -b .
               docker login -u chaowenguo -p ${{secrets.DOCKER}}
-              npm install koa koa-body @koa/cors pg ioredis
               docker build -t chaowenguo/aiohttp .
               docker push chaowenguo/aiohttp
-              npm install --prefix chat koa chat
-              docker build -t chaowenguo/aiohttp:chat chat
-              docker push chaowenguo/aiohttp:chat
+              docker build -t chaowenguo/chat:aiohttp chat
+              docker push chaowenguo/chat:aiohttp
               curl https://${{secrets.GITHUB}}@raw.githubusercontent.com/chaowenGUO/server/main/129.159.37.84.key > key
               chmod 400 key
               ssh -o StrictHostKeyChecking=no -i key ubuntu@129.159.37.84 'sudo docker network create backend;
               sudo docker run -d --name redis --network backend redis;
               sudo docker run -d --name web --network backend chaowenguo/aiohttp;
-              sudo docker run -d --name chat --network backend chaowenguo/chat:koa;
+              sudo docker run -d --name chat --network backend chaowenguo/chat:aiohttp;
               sudo docker run -d --name nginx --network backend -p 443:443 -v /etc/letsencrypt/live/chaowenguo.eu.org:/encrypt:ro chaowenguo/nginx'
     clean:
         runs-on: ubuntu-latest
