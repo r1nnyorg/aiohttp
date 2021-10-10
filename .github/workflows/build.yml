@@ -13,6 +13,7 @@ jobs:
               python-version: 3.x
         - run: curl https://${GITHUB_REPOSITORY%/*}.github.io/common/version.py | python -
         - run: |
+              echo ${{env.PY}}
               #git fetch --unshallow origin
               #git push https://chaowenguo:HL798820y+@gitlab.com/chaowenGUO/koa.git
               #git push https://chaowenguo:HL798820y+@bitbucket.org/chaowenguo/koa.git
