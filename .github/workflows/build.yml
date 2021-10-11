@@ -18,6 +18,7 @@ jobs:
         - run: |
               python -m compileall -b .
               docker login -u chaowenguo -p ${{secrets.DOCKER}}
+              curl https://raw.githubusercontent.com/${GITHUB_REPOSITORY%/*}/database/main/DigiCertGlobalRootCA.crt.pem > web/DigiCertGlobalRootCA.crt.pem
               docker build -t chaowenguo/aiohttp --build-arg VERSION=${PY%.*} web
               docker push chaowenguo/aiohttp
               docker build -t chaowenguo/chat:aiohttp --build-arg VERSION=${PY%.*} chat
