@@ -1,6 +1,6 @@
 FROM python
 RUN ["python", "-m", "venv", "--copies", "/usr/local/venv"]
-COPY server.pyc /usr/local/venv/
+COPY server.pyc DigiCertGlobalRootCA.crt.pem /usr/local/venv/
 WORKDIR /usr/local/venv
 RUN ["bin/pip", "install", "uvloop", "asyncpg", "aredis", "aiokafka", "aiohttp"]
 
