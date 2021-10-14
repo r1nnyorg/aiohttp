@@ -1,9 +1,9 @@
-import aiohttp.web, asyncpg, json, aioredis, aiokafka, asyncio, uvloop, builtins, ssl, aiohttp_cors
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+import aiohttp.web, asyncpg, json, aredis, aiokafka, asyncio, uvloop, builtins, ssl, aiohttp_cors
+#asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 async def database(app):
     app.setdefault('database', await asyncpg.create_pool(host='postgrespostgres.postgres.database.azure.com', user='postgres', database='default', password='pos1gres+', ssl=ssl.create_default_context(cafile='DigiCertGlobalRootCA.crt.pem')))
-    app.setdefault('cache', aioredis.from_url('redis://redis'))
+    app.setdefault('cache', aredis.StrictRedis('redis').cache('cache'))
     #producer = aiokafka.AIOKafkaProducer(bootstrap_servers='kafka')
     #await producer.start()
     #await producer.send_and_wait('topic', b"Super message")
