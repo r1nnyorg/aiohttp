@@ -1,4 +1,4 @@
-import aiohttp.web, asyncpg, json, aredis, aiokafka, asyncio, uvloop, builtins, ssl, aiohttp_cors
+import aiohttp.web, asyncpg, json, aredis, aiokafka, asyncio, builtins, ssl, aiohttp_cors
 #asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 async def database(app):
