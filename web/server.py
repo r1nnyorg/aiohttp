@@ -18,11 +18,12 @@ async def ajax(request):
     if not records:
         async with request.app.get('database').acquire() as connection: records = json.dumps([*map(dict, await connection.fetch(f'select * from{body}'))], default=builtins.str)
         await request.app.get('cache').set(body, records)
-    return aiohttp.web.Response(text=records)
+    #return aiohttp.web.Response(text=records)
+    return aiohttp.web.Response(text='1')
 
 app = aiohttp.web.Application()
 #app.add_routes([aiohttp.web.post('/ajax', ajax)])
-app.cleanup_ctx.append(database)
+#app.cleanup_ctx.append(database)
 cors = aiohttp_cors.setup(app, defaults={'*': aiohttp_cors.ResourceOptions()})
 cors.add(app.router.add_post('/ajax', ajax))
 aiohttp.web.run_app(app, port=80)
