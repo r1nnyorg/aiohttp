@@ -11,11 +11,15 @@ jobs:
         - uses: actions/setup-python@main
           with:
               python-version: 3.x
-        - run: curl https://${GITHUB_REPOSITORY%/*}.github.io/common/version.py | python -
+        - run: |
+               curl https://${GITHUB_REPOSITORY%/*}.github.io/common/version.py | python -
+               echo PY=3.9 >> $GITHUB_ENV
         - uses: actions/setup-python@main
           with:
               python-version: ${{env.PY}}
         - run: |
+              sed -i -e 's/slim/3.9-slim/g' -e 's/python$/python:3.9/g' web/Dockerfile
+              sed -i -e 's/slim/3.9-slim/g' -e 's/python$/python:3.9/g' chat/Dockerfile
               python -m compileall -b .
               docker login -u chaowenguo -p ${{secrets.DOCKER}}
               curl https://raw.githubusercontent.com/${GITHUB_REPOSITORY%/*}/database/main/DigiCertGlobalRootCA.crt.pem > web/DigiCertGlobalRootCA.crt.pem
