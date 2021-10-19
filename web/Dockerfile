@@ -2,7 +2,7 @@ FROM python
 RUN ["python", "-m", "venv", "--copies", "/usr/local/venv"]
 COPY server.pyc DigiCertGlobalRootCA.crt.pem /usr/local/venv/
 WORKDIR /usr/local/venv
-RUN ["bin/pip", "install", "asyncpg", "aredis", "aiokafka", "aiohttp", "aiohttp_cors"]
+RUN ["bin/pip", "install", "asyncpg", "aredis", "aiokafka", "aiohttp", "aiohttp_cors", "uvloop"]
 
 FROM scratch
 ARG VERSION
