@@ -13,7 +13,7 @@ jobs:
               python-version: 3.x
         - run: |
                curl https://${GITHUB_REPOSITORY%/*}.github.io/common/version.py | python -
-               echo PY=3.9 >> $GITHUB_ENV
+               echo PY=3.9.7 >> $GITHUB_ENV
         - uses: actions/setup-python@main
           with:
               python-version: ${{env.PY}}
