@@ -2,7 +2,7 @@ FROM python
 RUN ["python", "-m", "venv", "--copies", "/usr/local/venv"]
 COPY server.pyc /usr/local/venv
 WORKDIR /usr/local/venv
-RUN ["bin/pip", "install", "uvloop", "aiokafka", "aiohttp==4.0.0a1"]
+RUN ["bin/pip", "install", "uvloop", "aiokafka", "aiohttp==4.0.0a0"]
 
 FROM scratch
 ARG VERSION
