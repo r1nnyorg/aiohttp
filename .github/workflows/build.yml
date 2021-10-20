@@ -34,7 +34,7 @@ jobs:
               sudo docker run -d --name redis --network backend redis;
               sudo docker run -d --name web --network backend chaowenguo/aiohttp;
               sudo docker run -d --name chat --network backend chaowenguo/chat:aiohttp;
-              sudo docker run -d --name nginx --network backend -p 443:443 -v /etc/letsencrypt/live/chaowenguo.eu.org:/encrypt:ro chaowenguo/nginx'
+              sudo docker run -d --name ingress --network backend -p 443:443 -v /etc/letsencrypt/live/chaowenguo.eu.org:/encrypt:ro chaowenguo/ingress'
     clean:
         runs-on: ubuntu-latest
         if: github.event.schedule == '0 1 * * *'
