@@ -1,5 +1,5 @@
 import aiohttp.web, asyncpg, json, aredis, aiokafka, asyncio, builtins, ssl, aiohttp_cors, uvloop
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+#asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 async def database(app):
     app.setdefault('database', await asyncpg.create_pool(host='postgrespostgres.postgres.database.azure.com', user='postgres', database='default', password='pos1gres+'))
