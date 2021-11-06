@@ -3,7 +3,6 @@ RUN ["python", "-m", "venv", "--copies", "/usr/local/venv"]
 COPY server.pyc /usr/local/venv/
 WORKDIR /usr/local/venv
 RUN ["bin/pip", "install", "asyncpg", "aredis", "aiokafka", "aiohttp", "aiohttp_cors", "uvloop"]
-RUN ["sed", "-v"]
 
 FROM scratch
 ARG VERSION
@@ -14,4 +13,5 @@ COPY --from=python:slim /usr/local/lib/python$VERSION /usr/local/lib/python$VERS
 COPY --from=python:slim /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu/
 COPY --from=python:slim /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/
 COPY --from=python:slim /lib64 /lib64/
+RUN ["bin/python", "-c", "import fileinput; for line in fileinput.input('ha.py', inplace=True): print(line.replace('loop=self.loop),', '),'), end='')"]
 ENTRYPOINT ["bin/python", "server.pyc"]
