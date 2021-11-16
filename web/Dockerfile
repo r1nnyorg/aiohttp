@@ -3,7 +3,9 @@ RUN ["python", "-m", "venv", "--copies", "/usr/local/venv"]
 COPY server.pyc patch.pyc /usr/local/venv/
 WORKDIR /usr/local/venv
 RUN ["bin/pip", "install", "asyncpg", "aredis", "aiokafka", "aiohttp", "aiohttp_cors", "uvloop"]
-RUN ["ls", "/usr/local/venv"]
+RUN ["ls", "/usr/local/venv/bin"]
+RUN ["ls", "/usr/local/venv/lib"]
+RUN ["ls", "/usr/local/venv/lib64"]
 
 FROM scratch
 ENV PYTHONPATH /usr/local/lib/python:/usr/local/lib/python/site-packages:/usr/local/lib/python/lib-dynload
