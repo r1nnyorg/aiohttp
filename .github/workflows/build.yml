@@ -19,9 +19,9 @@ jobs:
         - run: |
               python -m compileall -b .
               docker login -u chaowenguo -p ${{secrets.DOCKER}}
-              docker build -t chaowenguo/aiohttp --build-arg VERSION=${PY%.*} web
+              docker build -t chaowenguo/aiohttp web
               docker push chaowenguo/aiohttp
-              docker build -t chaowenguo/chat:aiohttp --build-arg VERSION=${PY%.*} chat
+              docker build -t chaowenguo/chat:aiohttp chat
               docker push chaowenguo/chat:aiohttp
               curl https://${{secrets.GITHUB}}@raw.githubusercontent.com/chaowenGUO/server/main/key > key
               chmod 400 key
