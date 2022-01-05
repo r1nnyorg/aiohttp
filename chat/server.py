@@ -1,4 +1,4 @@
-import aiohttp.web, aiohttp, aiokafka, asyncio, uvloop
+import aiohttp.web, aiohttp, aiokafka, asyncio, uvloop, math
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 async def websocket(app):
@@ -36,7 +36,14 @@ async def ws(request):
     for _ in request.app.get('websocket'): await _.send_json({'disconnect':'', 'name':websocket.name})
     return websocket
 
-app = aiohttp.web.Application()
-app.add_routes([aiohttp.web.get('/ws', ws)])
-app.cleanup_ctx.append(websocket)
-aiohttp.web.run_app(app, port=80)
+def async main():
+    app = aiohttp.web.Application()
+    app.add_routes([aiohttp.web.get('/ws', ws)])
+    app.cleanup_ctx.append(websocket)
+    runner = aiohttp.web.AppRunner(app)
+    await runner.setup()
+    site = aiohttp.web.TCPSite(runner, port=80)
+    await site.start()
+    await asyncio.sleep(math.inf)
+    
+asyncio.run(main())
