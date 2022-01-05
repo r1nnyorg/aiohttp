@@ -36,7 +36,7 @@ async def ws(request):
     for _ in request.app.get('websocket'): await _.send_json({'disconnect':'', 'name':websocket.name})
     return websocket
 
-def async main():
+async def main():
     app = aiohttp.web.Application()
     app.add_routes([aiohttp.web.get('/ws', ws)])
     app.cleanup_ctx.append(websocket)
