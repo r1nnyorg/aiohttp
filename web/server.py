@@ -20,9 +20,16 @@ async def ajax(request):
         await request.app.get('cache').set(body, records)
     return aiohttp.web.Response(text=records)
 
-app = aiohttp.web.Application()
-#app.add_routes([aiohttp.web.post('/ajax', ajax)])
-app.cleanup_ctx.append(database)
-cors = aiohttp_cors.setup(app, defaults={'*': aiohttp_cors.ResourceOptions()})
-cors.add(app.router.add_post('/ajax', ajax))
-aiohttp.web.run_app(app, port=80)
+async def main():
+    app = aiohttp.web.Application()
+    #app.add_routes([aiohttp.web.post('/ajax', ajax)])
+    app.cleanup_ctx.append(database)
+    cors = aiohttp_cors.setup(app, defaults={'*': aiohttp_cors.ResourceOptions()})
+    cors.add(app.router.add_post('/ajax', ajax))
+    runner = aiohttp.web.AppRunner(app)
+    await runner.setup()
+    site = aiohttp.web.TCPSite(runner, port=80)
+    await site.start()
+    await asyncio.sleep(math.inf)
+    
+asyncio.run(main())
