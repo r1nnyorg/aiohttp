@@ -29,7 +29,7 @@ jobs:
               ssh -o StrictHostKeyChecking=no -i key ubuntu@20.112.94.147 'sudo docker stop `sudo docker container ls -q`;
               sudo docker system prune -af;
               sudo docker network create backend;
-              sudo docker run -d --name redis --network backend -p 6379:6379 chaowenguo/redis;
+              sudo docker run -d --name redis --network backend -p 6379:6379 -p 16379:16379 redis --cluster-enabled yes;
               sudo docker run -d --name web --network backend chaowenguo/aiohttp;
               sudo docker run -d --name chat --network backend chaowenguo/chat:aiohttp;
               sudo docker run -d --name ingress --network backend -p 443:443 -v /etc/letsencrypt/live/chaowenguo.eu.org:/encrypt:ro chaowenguo/ingress'
