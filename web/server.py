@@ -3,7 +3,7 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 async def database(app):
     app.setdefault('database', await asyncpg.create_pool(host='postgrespostgres.postgres.database.azure.com', user='postgres', database='default', password='pos1gres+'))
-    app.setdefault('cache', aredis.StrictRedisCluster(host='redis', port=6379).cache('cache'))
+    app.setdefault('cache', aredis.StrictRedisCluster(host='redis', port=6379))
     #producer = aiokafka.AIOKafkaProducer(bootstrap_servers='kafka')
     #await producer.start()
     #await producer.send_and_wait('topic', b"Super message")
@@ -14,10 +14,10 @@ async def database(app):
 async def ajax(request):
     body = await request.json()
     body = ' '.join(' '.join((key, builtins.str(value))) for key,value in body.items())
-    records = await request.app.get('cache').get(body)
+    records = await request.app.get(body)
     if not records:
         async with request.app.get('database').acquire() as connection: records = json.dumps([*map(dict, await connection.fetch(f'select * from{body}'))], default=builtins.str)
-        await request.app.get('cache').set(body, records)
+        await request.app.set(body, records)
     return aiohttp.web.Response(text=records)
 
 async def main():
