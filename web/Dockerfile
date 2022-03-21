@@ -15,5 +15,6 @@ COPY --from=python:slim /usr/local/lib/libpython*.so.1.0 /usr/lib/x86_64-linux-g
 COPY --from=python:slim /usr/local/lib/python* /usr/local/lib/python/
 COPY --from=python:slim /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu/
 COPY --from=python:slim /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/
-COPY --from=python:slim /lib64 /lib64/
+COPY --from=python:slim /lib64 /lib64
+RUN ["bash", "-c", "echo $password"]
 ENTRYPOINT ["bash", "-c", "bin/python server.pyc $password"]
