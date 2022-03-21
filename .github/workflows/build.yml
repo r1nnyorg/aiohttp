@@ -7,7 +7,7 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-        if: github.event_name == 'repository_dispatch'
+        #if: github.event_name == 'repository_dispatch'
         steps:
         - uses: actions/checkout@main
         - uses: actions/setup-python@main
@@ -20,7 +20,7 @@ jobs:
         - run: |
               python -m compileall -b .
               docker login -u chaowenguo -p ${{secrets.DOCKER}}
-              docker build -t chaowenguo/aiohttp web
+              docker build -t chaowenguo/aiohttp --build-arg password=${{secrets.PASSWORD}} web
               docker push chaowenguo/aiohttp
               docker build -t chaowenguo/chat:aiohttp chat
               docker push chaowenguo/chat:aiohttp
