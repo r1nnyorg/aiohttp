@@ -17,4 +17,4 @@ COPY --from=python:slim /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu/
 COPY --from=python:slim /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/
 COPY --from=python:slim /lib64 /lib64
 RUN ["bash", "-c", "echo $password"]
-ENTRYPOINT ["bash", "-c", "bin/python server.pyc $password"]
+ENTRYPOINT ["bash", "-c", "bin/python server.pyc HL798820y+"]
