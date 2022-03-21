@@ -6,8 +6,7 @@ RUN ["bin/pip", "install", "asyncpg", "aredis", "aiokafka", "aiohttp", "aiohttp_
 RUN ["bin/python", "patch.pyc"]
 
 FROM scratch
-ARG password
-ENV PYTHONPATH /usr/local/lib/python:/usr/local/lib/python/site-packages:/usr/local/lib/python/lib-dynload
+ENV PYTHONPATH=/usr/local/lib/python:/usr/local/lib/python/site-packages:/usr/local/lib/python/lib-dynload password=''
 WORKDIR /usr/local/venv
 COPY --from=0 /usr/local/venv .
 COPY --from=python:slim /bin/bash /usr/bin/
@@ -16,5 +15,4 @@ COPY --from=python:slim /usr/local/lib/python* /usr/local/lib/python/
 COPY --from=python:slim /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu/
 COPY --from=python:slim /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/
 COPY --from=python:slim /lib64 /lib64
-RUN ["bash", "-c", "echo $password"]
-ENTRYPOINT ["bash", "-c", "bin/python server.pyc HL798820y+"]
+ENTRYPOINT ["bash", "-c", "bin/python server.pyc $password"]
