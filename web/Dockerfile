@@ -10,6 +10,7 @@ ARG password
 ENV PYTHONPATH /usr/local/lib/python:/usr/local/lib/python/site-packages:/usr/local/lib/python/lib-dynload
 WORKDIR /usr/local/venv
 COPY --from=0 /usr/local/venv .
+COPY --from=python:slim /bin/bash /usr/bin/
 COPY --from=python:slim /usr/local/lib/libpython*.so.1.0 /usr/lib/x86_64-linux-gnu/
 COPY --from=python:slim /usr/local/lib/python* /usr/local/lib/python/
 COPY --from=python:slim /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu/
