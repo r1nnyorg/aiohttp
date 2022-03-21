@@ -1,11 +1,9 @@
-import aiohttp.web, asyncpg, json, aredis, aiokafka, asyncio, builtins, aiohttp_cors, uvloop, math, argparse
+import aiohttp.web, asyncpg, json, aredis, aiokafka, asyncio, builtins, aiohttp_cors, uvloop, math, os
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-parser = argparse.ArgumentParser()
-parser.add_argument('password')
 
 async def database(app):
     app.setdefault('database', await asyncpg.create_pool(host='postgrespostgres.postgres.database.azure.com', user='postgres', database='default', password='pos1gres+'))
-    app.setdefault('cache', aredis.StrictRedisCluster(host='redis', port=6379, password=parser.parse_args().password))
+    app.setdefault('cache', aredis.StrictRedisCluster(host='redis', port=6379, password=os.getenv('password')))
     #producer = aiokafka.AIOKafkaProducer(bootstrap_servers='kafka')
     #await producer.start()
     #await producer.send_and_wait('topic', b"Super message")
