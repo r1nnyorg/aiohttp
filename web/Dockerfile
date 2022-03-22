@@ -1,6 +1,6 @@
 FROM python
 RUN ["python", "-m", "venv", "--copies", "/usr/local/venv"]
-COPY server.pyc patch.pyc /usr/local/venv/
+COPY server.pyc patch.pyc ca.crt client.root.crt client.root.key /usr/local/venv/
 WORKDIR /usr/local/venv
 RUN ["bin/pip", "install", "asyncpg", "aredis", "aiokafka", "aiohttp", "aiohttp_cors", "uvloop"]
 RUN ["bin/python", "patch.pyc"]
