@@ -4,7 +4,7 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 async def database(app):
     #app.setdefault('database', await asyncpg.create_pool(host='postgrespostgres.postgres.database.azure.com', user='postgres', database='default', password='pos1gres+'))
     app.setdefault('database', await asyncpg.create_pool(host='cockroach', user='root', database='defaultdb'))
-    app.setdefault('cache', aredis.StrictRedisCluster(host='redis', port=6379, password=os.getenv('password')))
+    app.setdefault('cache', aredis.StrictRedisCluster(host='redis', port=6379, password=os.getenv('password'))) #app.setdefault('cache', aredis.StrictRedis('redis'))
     #producer = aiokafka.AIOKafkaProducer(bootstrap_servers='kafka')
     #await producer.start()
     #await producer.send_and_wait('topic', b"Super message")
