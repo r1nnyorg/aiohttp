@@ -19,6 +19,7 @@ async def ajax(request):
     body = await request.json()
     body = ' '.join(' '.join((key, builtins.str(value))) for key,value in body.items())
     records = await request.app.get('cache').get(body)
+    print(records, type(records), flush=True)
     if not records:
         async with request.app.get('database').acquire() as connection: records = json.dumps([*map(dict, await connection.fetch(f'select * from{body}'))], default=builtins.str)
         await request.app.get('cache').set(body, records)
