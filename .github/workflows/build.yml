@@ -23,7 +23,7 @@ jobs:
               curl https://${{secrets.GITHUB}}@raw.githubusercontent.com/chaowenGUO/server/main/key > key
               chmod 400 key
               git -c core.sshCommand='ssh -i key -o StrictHostKeyChecking=no' clone git@github.com:chaowenGUO/key keykey
-              cp -r keykey/certs/* .
+              cp -r keykey/certs/* web
               rm -rf keykey
               docker build -t chaowenguo/aiohttp web
               docker push chaowenguo/aiohttp
