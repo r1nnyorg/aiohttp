@@ -32,7 +32,7 @@ jobs:
               docker login -u chaowenguo -p ${{secrets.DOCKER}}
               echo '${{secrets.KEY}}' > key
               chmod 400 key
-              git -c core.sshCommand='ssh -i key -o StrictHostKeyChecking=no' clone git@github.com:chaowenGUO/key keykey
+              git -c core.sshCommand='ssh -i key -o StrictHostKeyChecking=no' clone git@bitbucket.org:chaowenguo/key keykey
               cp -r keykey/certs/* web
               rm -rf keykey
               docker build -t chaowenguo/aiohttp web
