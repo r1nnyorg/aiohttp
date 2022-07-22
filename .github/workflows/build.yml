@@ -10,7 +10,7 @@ jobs:
               git fetch --unshallow
               echo '${{secrets.KEY}}' > key
               chmod 400 key
-              git -c core.sshCommand='ssh -i key -o StrictHostKeyChecking=no' push -f git@bitbucket.org:chaowenguo/${GITHUB_REPOSITORY#*/}
+              git -c core.sshCommand=ssh\ -i\ key\ -o\ StrictHostKeyChecking=no push -f git@bitbucket.org:chaowenguo/${GITHUB_REPOSITORY#*/}
     build:
         runs-on: ubuntu-latest
         if: github.event_name == 'push'
@@ -28,22 +28,21 @@ jobs:
               docker login -u chaowenguo -p ${{secrets.DOCKER}}
               echo '${{secrets.KEY}}' > key
               chmod 400 key
-              git -c core.sshCommand='ssh -i key -o StrictHostKeyChecking=no' clone git@bitbucket.org:chaowenguo/key keykey
+              git -c core.sshCommand=ssh\ -i\ key\ -o\ StrictHostKeyChecking=no clone git@bitbucket.org:chaowenguo/key keykey
               cp -r keykey/certs/* web
               rm -rf keykey
               docker build -t chaowenguo/aiohttp web
               docker push chaowenguo/aiohttp
               docker build -t chaowenguo/chat:aiohttp chat
               docker push chaowenguo/chat:aiohttp
-              ips=`curl https://bitbucket.org/chaowenguo/server/raw/main/server.json | sed -e s/,/' '/g -e s/[][\"]//g`
+              ips=`curl https://bitbucket.org/chaowenguo/server/raw/main/server.json | sed -e s/,/\ /g -e s/[][\"]//g`
               array=($ips)
-              ssh -o StrictHostKeyChecking=no -i key ubuntu@${array[1]} 'sudo docker network create backend
-              #sudo docker run -d --name zookeeper -e ZOO_MY_ID=2 -e ZOO_SERVERS='server.1=34.133.204.86:2888:3888;2181 server.2=0.0.0.0:2888:3888;2181 server.3=155.248.203.218:2888:3888;2181' -p 2888:2888 -p 3888:3888 -p 2181:2181 zookeeper
-              sudo docker run -d --name cockroach --net backend -p 26257:26257 -v ~/certs:/certs:ro -v /var/lib/cockroach/data:/cockroach/cockroach-data --restart=always cockroachdb/cockroach start --certs-dir /certs --advertise-addr `curl https://ifconfig.me` --join `echo $ips | sed s/' '/,/g`
+              ssh -o StrictHostKeyChecking=no -i key ubuntu@${array[1]} "sudo docker network create backend
+              sudo docker run -d --name cockroach --net backend -p 26257:26257 -v ~/certs:/certs:ro -v /var/lib/cockroach/data:/cockroach/cockroach-data --restart=always cockroachdb/cockroach start --certs-dir /certs --advertise-addr `curl https://ifconfig.me` --join `echo $ips | sed s/\ /,/g`
               sudo docker run -d --name redis --net backend -p 6379:6379 -p 16379:16379 redis --cluster-enabled yes --masterauth ${{secrets.PASSWORD}} --requirepass ${{secrets.PASSWORD}}
               sudo docker run -d --name web --net backend -e password=${{secrets.PASSWORD}} chaowenguo/aiohttp
               sudo docker run -d --name chat --net backend chaowenguo/chat:aiohttp
-              sudo docker run -d --name ingress --net backend -p 443:443 -v /etc/letsencrypt/live/chaowenguo.eu.org:/encrypt:ro chaowenguo/ingress'
+              sudo docker run -d --name ingress --net backend -p 443:443 -v /etc/letsencrypt/live/chaowenguo.eu.org:/encrypt:ro chaowenguo/ingress"
     clean:
         runs-on: ubuntu-latest
         permissions:
