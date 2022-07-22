@@ -1,7 +1,4 @@
-on:
-    push:
-    schedule:
-    - cron: '0 1 * * *'
+on: push
 
 jobs:
     backup:
@@ -47,7 +44,8 @@ jobs:
               sudo docker run -d --name ingress --net backend -p 443:443 -v /etc/letsencrypt/live/chaowenguo.eu.org:/encrypt:ro chaowenguo/ingress'
     clean:
         runs-on: ubuntu-latest
-        if: github.event.schedule == '0 1 * * *'
+        permissions:
+            actions: write
         steps:
         - uses: actions/setup-python@main
           with:
