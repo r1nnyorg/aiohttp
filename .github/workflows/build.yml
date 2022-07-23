@@ -37,7 +37,9 @@ jobs:
               docker push chaowenguo/chat:aiohttp
               ips=`curl https://bitbucket.org/chaowenguo/server/raw/main/server.json | sed -e s/,/\ /g -e s/[][\"]//g`
               array=($ips)
-              ssh -o StrictHostKeyChecking=no -i key ubuntu@${array[1]} "sudo docker network create backend
+              ssh -o StrictHostKeyChecking=no -i key ubuntu@${array[1]} "sudo docker stop `sudo docker container ls -q`
+              sudo docker system prune -af
+              sudo docker network create backend
               sudo docker run -d --name cockroach --net backend -p 26257:26257 -v ~/certs:/certs:ro -v /var/lib/cockroach/data:/cockroach/cockroach-data --restart=always cockroachdb/cockroach start --certs-dir /certs --advertise-addr `curl https://ifconfig.me` --join `echo $ips | sed s/\ /,/g`
               sudo docker run -d --name redis --net backend -p 6379:6379 -p 16379:16379 redis --cluster-enabled yes --masterauth ${{secrets.PASSWORD}} --requirepass ${{secrets.PASSWORD}}
               sudo docker run -d --name web --net backend -e password=${{secrets.PASSWORD}} chaowenguo/aiohttp
