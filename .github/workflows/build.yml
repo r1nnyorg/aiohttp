@@ -13,7 +13,7 @@ jobs:
               git -c core.sshCommand='ssh -i key -o StrictHostKeyChecking=no' push -f git@bitbucket.org:chaowenguo/${GITHUB_REPOSITORY#*/}
     build:
         runs-on: ubuntu-latest
-        if: github.event_name == 'push'
+        if: github.event_name == 'dummy'
         steps:
         - uses: actions/checkout@main
         - uses: actions/setup-python@main
@@ -35,8 +35,8 @@ jobs:
               docker push chaowenguo/aiohttp
               docker build -t chaowenguo/chat:aiohttp chat
               docker push chaowenguo/chat:aiohttp
-              ips=$(curl https://bitbucket.org/chaowenguo/server/raw/main/ip.json | sed -e s/,/\ /g -e s/[][\"]//g)
-              array=($ips)
+              readonly ips=$(curl https://bitbucket.org/chaowenguo/server/raw/main/ip.json | sed -e s/,/\ /g -e s/[][\"]//g)
+              readonly array=($ips)
               ssh -o StrictHostKeyChecking=no -i key ubuntu@${array[1]} 'sudo docker stop $(sudo docker container ls -q)
               sudo docker system prune -af
               sudo rm -rf /var/lib/cockroach
