@@ -35,7 +35,7 @@ jobs:
               docker push chaowenguo/aiohttp
               docker build -t chaowenguo/chat:aiohttp chat
               docker push chaowenguo/chat:aiohttp
-              ips=$(curl https://bitbucket.org/chaowenguo/server/raw/main/server.json | sed -e s/,/\ /g -e s/[][\"]//g)
+              ips=$(curl https://bitbucket.org/chaowenguo/server/raw/main/ip.json | sed -e s/,/\ /g -e s/[][\"]//g)
               array=($ips)
               ssh -o StrictHostKeyChecking=no -i key ubuntu@${array[1]} 'sudo docker stop $(sudo docker container ls -q)
               sudo docker system prune -af
