@@ -42,7 +42,7 @@ async def main():
     sslctx = ssl.create_default_context(cafile=pathlib.Path(__file__).resolve().parent.joinpath('ca.crt'))
     sslctx.check_hostname = False
     sslctx.load_cert_chain(pathlib.Path(__file__).resolve().parent.joinpath('client.root.crt'), keyfile=pathlib.Path(__file__).resolve().parent.joinpath('client.root.key'))
-    database=await asyncpg.create_pool(host='cockroach', user='root', database='defaultdb', port=26257, ssl=sslctx)
+    database=await asyncpg.create_pool(host='cockroach', user='root', database='defaultdb', port=26257, ssl=False)
     async with database.acquire() as connection: builtins.print(connection.fetch('select * from productitem'))
 
 asyncio.run(main())
