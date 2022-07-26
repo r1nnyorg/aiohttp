@@ -14,4 +14,5 @@ COPY --from=python:slim /usr/local/lib/python* /usr/local/lib/python/
 COPY --from=python:slim /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu/
 COPY --from=python:slim /usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/
 COPY --from=python:slim /lib64 /lib64
+COPY --from=python:slim /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 ENTRYPOINT ["bin/python", "server.pyc"]
