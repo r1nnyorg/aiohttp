@@ -6,7 +6,7 @@ RUN ["bin/pip", "install", "asyncpg", "aredis", "aiokafka", "aiohttp", "aiohttp_
 RUN ["bin/python", "patch.pyc"]
 
 FROM scratch
-ENV PYTHONPATH=/usr/local/lib/python:/usr/local/lib/python/site-packages:/usr/local/lib/python/lib-dynload password=''
+ENV PYTHONPATH=/usr/local/lib/python:/usr/local/lib/python/site-packages:/usr/local/lib/python/lib-dynload
 WORKDIR /usr/local/venv
 COPY --from=0 /usr/local/venv .
 COPY --from=python:slim /usr/local/lib/libpython*.so.1.0 /usr/lib/x86_64-linux-gnu/
